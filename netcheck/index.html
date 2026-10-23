@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Network Check</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui;background:#0b1020;color:#f5f7ff}
+body{margin:0;padding:24px 14px}main{max-width:540px;margin:auto}
+h1{font-size:30px;margin:8px 0}p{color:#c3ccdb;line-height:1.5}
+section{background:#172239;border:1px solid #334462;border-radius:16px;margin:18px 0;padding:17px}
+button{padding:15px 10px;background:#4285ed;color:white;border:0;border-radius:10px;font-weight:700;font-size:14px}
+button:disabled{opacity:.45}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+progress{width:100%;margin-top:20px}pre{white-space:pre-wrap;overflow-wrap:anywhere}
+a{color:#9ac7ff}small{color:#9eacc1}
+</style></head><body><main><small>Independent phone diagnostics</small>
+<h1>Comcast vs Cellular</h1>
+<p>Check your iPhone's internet response times beside your PS5. No Comcast login, router access, or installation.</p>
+<section><h2>Run two tests</h2><p>First connect to Comcast Wi-Fi and test. Next switch Wi-Fi off in iPhone Settings, confirm cellular is active, and test again.</p>
+<div class="buttons"><button id="wifi">Test Wi-Fi</button><button id="cell">Test Cellular</button></div>
+<progress id="bar" value="0" max="20"></progress><p id="status">Ready.</p></section>
+<section><h2>Results</h2><pre id="out">No measurements yet.</pre><button id="copy">Copy results</button></section>
+<section><h2>Interpretation</h2>
+<p>Wi-Fi fails but cellular works: investigate Comcast or local Wi-Fi.</p>
+<p>Both work, FC 27 still lags: an EA-specific connection, PS5 networking, or firmware interaction remains possible.</p>
+<p><strong>Scope:</strong> These are HTTPS request timings, not EA's UDP packet loss or game jitter. Site failures can include filtering and timeouts. The page stores results only on your phone.</p>
+<p>For another measurement use <a href="https://speed.cloudflare.com/">Cloudflare Speed Test</a>.</p></section>
+</main><script>
+const $=id=>document.getElementById(id);
+const key="netcheck-2026";let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")}catch(e){}
+const url=location.origin+location.pathname;
+const fmt=x=>x==null?"n/a":Math.round(x)+"ms";
+function render(){const labels=["Wi-Fi","Cellular"],rows=[];for(const name of labels){const d=saved[name];if(!d)continue;const a=d.samples.filter(n=>n!==null).sort((x,y)=>x-y);const mid=a.length?a[Math.floor(a.length/2)]:null;const p95=a.length?a[Math.ceil(a.length*.95)-1]:null;rows.push(name+" ("+d.date+")\nMedian: "+fmt(mid)+"; p95: "+fmt(p95)+"; requests failed: "+(20-a.length)+"/20")} $("out").textContent=rows.join("\n\n")||"No measurements yet."}
+async function sample(){const c=new AbortController();const t=setTimeout(()=>c.abort(),3500);const start=performance.now();try{await fetch(url+"?t="+Date.now()+"-"+Math.random(),{cache:"no-store",signal:c.signal});return performance.now()-start}catch(e){return null}finally{clearTimeout(t)}}
+async function run(name){$("wifi").disabled=true;$("cell").disabled=true;$("bar").value=0;const samples=[];for(let i=0;i<20;i++){$("status").textContent=name+" sample "+(i+1)+"/20";samples.push(await sample());$("bar").value=i+1;if(i<19)await new Promise(r=>setTimeout(r,650))}saved[name]={date:new Date().toLocaleString(),samples};try{localStorage.setItem(key,JSON.stringify(saved))}catch(e){}render();$("status").textContent=name+" complete.";$("wifi").disabled=false;$("cell").disabled=false}
+$("wifi").onclick=()=>run("Wi-Fi");$("cell").onclick=()=>run("Cellular");$("copy").onclick=async()=>{try{await navigator.clipboard.writeText($("out").textContent);$("status").textContent="Copied."}catch(e){$("status").textContent="Select results above to copy."}};
+render();
+</script></body></html>

@@ -1,10 +1,11 @@
-name: Publish Nightshift
+name: Publish Nightshift and Network Check
 
 on:
   push:
     branches: [main]
     paths:
       - "nightshift/**"
+      - "netcheck/**"
       - ".github/workflows/nightshift-pages.yml"
   workflow_dispatch:
 
@@ -28,11 +29,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Prepare Nightshift-only site
+      - name: Prepare Pages site
         shell: bash
         run: |
-          mkdir -p _site/nightshift
+          mkdir -p _site/nightshift _site/netcheck
           cp nightshift/index.html _site/nightshift/index.html
+          cp netcheck/index.html _site/netcheck/index.html
           echo '<!doctype html><meta http-equiv="refresh" content="0;url=nightshift/"><a href="nightshift/">Open Nightshift</a>' > _site/index.html
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

@@ -8,7 +8,8 @@ This branch holds the comprehensive research report and a ready-to-read discover
 1. **[Full Deep Research report](docs/DEEP_RESEARCH_REPORT.md)** — The most recent long-form research report (October 24, 2026), including the AI SRE landscape, four architecture approaches, knowledge indexing, identity and dependency mapping, labeling, freshness, hypothesis-based investigation, live explainable UI, permissions, isolated reproduction, model token costs, and implementation feasibility.
 2. **[Internal-agent handoff](AGENT_HANDOFF.md)** — The actual discovery assignment extracted from that report. It asks an authorized internal agent to discover the real system, existing tools and limits before making any architecture choices.
 3. **[Multi-agent operations workbench](docs/MULTI_AGENT_OPERATIONS_WORKBENCH.md)** — Newer requirement: a Claude-first specialist-agent lobby, sharing evidence rather than full transcripts, VS Code/Claude/Copilot interface options, corporate permissions and token-cost controls. Read this **in addition to** the initial research and handoff; its design is not yet verified internally.
-4. **[Knowledge model notes](docs/01-knowledge-model.md)** — Supplementary preliminary design notes for entity/relationship/evidence schemas. These were drafted **before** the latest Deep Research report and should not override it.
+4. **[Contrarian & Explorer roles](docs/CONTRARIAN_AND_EXPLORER_ROLES.md)** — Two testable oversight characters: one falsifies unsupported conclusions, the other finds useful overlooked checks. Both are invoked only when justified and are subject to token, tool, and permission limits.
+5. **[Knowledge model notes](docs/01-knowledge-model.md)** — Supplementary preliminary design notes for entity/relationship/evidence schemas. These were drafted **before** the latest Deep Research report and should not override it.
 
 ## Core objective
 

@@ -1,134 +1,936 @@
-# Internal Agent Handoff — Read Before Doing Anything
-## Role
-You are an authorized internal investigation/discovery agent. A user is exploring an **operational intelligence and AI incident-investigation platform**. You may have access to code, documents and approved tools that the external research author does not. Your job is to **determine what is actually true and feasible**, not force the environment into an invented architecture.
+# Internal AI Agent — Latest Deep Research Handoff
 
-**Do not push results, code, screenshots, inferred topology or sensitive summaries back to this public repository.** This is a read-only reference. Store any internal outputs only in approved internal locations.
+**Source of this assignment:** [Full Deep Research report (October 24, 2026)](docs/DEEP_RESEARCH_REPORT.md). This handoff is extracted from that report, not based on preliminary notes. For background, alternatives, public vendor research, limitations and cost assumptions, read the full report first.
 
-## Required operating rules
-1. First determine your tool permissions and data-handling restrictions. Do not start by scanning all repositories or chat messages.
-2. Use read-only tools and narrowly scoped queries unless your operator explicitly approves a defined modification.
-3. Do not infer that tool availability implies authorization. Do not use another team's cloud account, identity, terminal, cluster or secrets to bypass access control.
-4. Do not retrieve or publish confidential or personal data into external services. Apply organizational model-data policies before sending text to an LLM.
-5. Never make a production-changing action without a separate explicit approval and existing allowed workflow. If an action requires an infrastructure owner, prepare a precise request.
-6. Stop when permissions are unclear. A useful report must still be delivered.
-7. Avoid expensive recursive searches or full-repo embeddings until a measured need exists.
-8. Record observations and evidence. Do not manufacture knowledge of code, ownership, runbooks, or system behavior.
-9. Maintain a running token/tool budget and a decision log of what an operation was expected to learn.
+**Public reference, private investigation:** This repository is public and read-only for your investigation. Never commit, push, open an issue, or attach any internal application names, code snippets, customer information, credentials, logs, runtime topology, incident details or work artifacts here. Keep discoveries exclusively in an explicitly authorized internal workspace and comply with organizational policies on external models and data.
 
-## Assignment and scope
-The user imagines a support engineer reporting an operational fault. The system should identify the relevant business/technical object, show how it is produced and used, identify upstream/downstream impact, consult fresh approved data from different tools, perform disciplined parallel checks, show progress live, and accumulate reliable incident memory. Later, authorized lower environments might support controlled reproduction and experiments. Production infrastructure operations may belong to a different team.
+**Start with discovery, not implementation.** Do not access production data, execute commands, provision infrastructure, or automate internal processes merely because this document discusses those capabilities. Confirm the user's scope and your authorized access first; keep discovery read-only. Obtain explicit permission before touching confidential sources or making changes.
 
-Important: avoid assuming any particular backend, runtime, workflow system, technology, financial process, protocol or deployment topology. Treat familiar terms as possibilities until proved.
+**Most important requirement:** Minimize model tokens and expensive tool calls throughout. Measure useful evidence and correct diagnosis per token; avoid broad ingestion, giant model contexts, unnecessary model-to-model conversations, or adopting graph/vector infrastructure without demonstrated value. Every relationship and conclusion must have auditable provenance and a fresh verification state. A human must be able to see the developing dependency graph and investigation events live.
 
-## Phase 0 — Safe scope inventory, before code reading
-Create a concise table with: source category, example questions it can answer, available connector, permissions, freshness, query cost, sensitivity, owner, and gaps.
+---
 
-Consider categories without assuming their presence: code and change records; runtime telemetry; scheduling; input/output artifacts; message systems; RPC; persistent stores; infrastructure inventories; knowledge documents; incident and chat history; human operations; and lower environments.
+# Operational Investigation Platform — Discovery Assignment
 
-For every proposed connector ask whether it is already sanctioned, whether it returns source identifiers/timestamps, whether it enforces document-level permissions, and whether results may be sent to the selected model.
+## Mission
 
-**Output:** one-page access and evidence feasibility matrix.
+Investigate this organization's real engineering and production-support
+environment and determine how an evidence-grounded AI operational investigation
+system could be built here.
 
-## Phase 1 — Discover the actual ontology
-Select a narrow user-approved example, such as a missing expected artifact or failed scheduled execution. Identify the exact internal object from approved sources and answer:
+Do not assume that any example technology, entity, protocol, architecture,
+database, cloud provider, scheduler, queue, storage system, observability
+platform, infrastructure tool, or deployment model mentioned in this document
+exists internally.
 
-- What is this object, in plain business language and technical language?
-- Is the name ambiguous or overloaded?
-- Which code/config/deploy metadata defines it?
-- Which observable action produces it, triggers it, transmits it, consumes it or depends on it?
-- Where does the evidence for each relation live?
-- How is it scheduled; what time zone, deadline, recurrence, conditions and overrides apply, if any?
-- Is there observable current state, a trace or correlation ID, an event, or an audit record?
-- What is the business effect if it is missing, delayed, malformed or duplicated?
-- Who is the proper human or team escalation owner?
-- Which questions cannot be answered with present access?
+Discover the actual environment from available evidence.
 
-**Output:** a minimal entity/relationship inventory where every edge has an evidence citation and quality state. Unknown is acceptable.
+The eventual goal is an internal system capable of helping a human understand
+and investigate operational problems across scattered sources while keeping
+model/token usage low.
 
-## Phase 2 — A narrow retrospective investigation
-Pick one already-closed, permission-approved incident with non-sensitive details or a fully synthetic incident. Reconstruct the actual checked actions and outcomes, not hidden internal reasoning:
+The target is not a chatbot.
 
-Report -> named entity -> direct evidence -> candidate dependencies -> independent read-only checks -> competing hypotheses -> observation that favored/disfavored each -> resolution and verification -> downstream impact -> follow-up action.
+The target is an operational investigation engine with:
 
-Ask, without presuming technical tools:
-- Did a trigger execute?
-- Did an expected prerequisite exist at the relevant time?
-- Did output appear, and where is its authoritative confirmation?
-- Was the data merely delayed, malformed, duplicated or filtered?
-- Was there a relevant parameter, config, permission, dependency, capacity or code change?
-- What alternative explanation matches the observations?
-- What exact check would best distinguish the hypotheses?
-- Is the next check blocked by access rights?
+- entity understanding
+- upstream/downstream dependency understanding
+- live operational evidence retrieval
+- code/change correlation
+- hypothesis-driven investigation
+- evidence-backed conclusions
+- reusable operational memory
+- reusable troubleshooting skills
+- historical evaluation
+- human-visible investigation state
+- strict permission boundaries
+- optional controlled sandbox reproduction where feasible
 
-**Output:** one reviewed case in the structured format in docs/01-knowledge-model.md. No automatic broad ingestion yet.
+Do not make production changes as part of this discovery.
 
-## Phase 3 — Validate information architecture, not a predetermined database
-Evaluate smallest sufficient options:
-- existing full-text search plus a compact record store;
-- exact-match / keyword plus metadata filters;
-- vector search only where semantic retrieval adds measurable value;
-- a relational table of typed dependencies;
-- a graph store only if multi-hop traversals or relationship maintenance demand it;
-- specialized code-search indices or existing code search instead of indiscriminately embedding every file.
+Do not introduce new infrastructure merely because this document mentions it.
 
-Measure real tasks on identical evaluation cases. Quantify answer correctness, retrieval quality, model cost, storage/ingestion cost, complexity and permission isolation. Recommend a graph DB only with supporting tests.
+Do not commit to a graph database, vector database, agent framework, MCP,
+Terraform, Kubernetes, a specific LLM, or any other implementation technology
+until the real requirements justify it.
 
-**Output:** 2–3 viable options with tradeoffs, price bounds, proof points and unknowns.
+## Core problem
 
-## Phase 4 — Evaluate live investigations and visual design
-Define a tool-call event contract and sketch an interactive experience:
-- incident header: affected object, current effect, deadline, owner, stage;
-- expandable verified/inferred dependency graph, with provenance per edge;
-- live readable event timeline: action planned / running / completed / failed / blocked;
-- human-readable explanation for each tool action, with bounded query scope;
-- evidence drawer, link to source and source last-updated time;
-- working hypotheses with supporting and contradictory facts;
-- controls to pause, challenge, annotate, re-run permitted checks and approve restricted actions;
-- explicit "not investigated" and "inaccessible" states.
+Operational troubleshooting knowledge is distributed.
 
-**Output:** low-fidelity UI with synthetic data and a trace event schema. No copied private information.
+A human responder may need to move among several systems to understand a single
+problem.
 
-## Phase 5 — Evaluate sandbox reproduction (optional capability)
-Find whether any **approved internal development or temporary environment** exists. Do not assume the team controls Terraform, deployment pipelines, clusters or production credentials. Confirm:
-- Who can create/destroy environments and with what quota?
-- Which infrastructure resources are safe to emulate?
-- Can relevant code and configuration be run locally or in existing dev?
-- Can event streams and external services be replaced with synthetic fixtures?
-- Are available observations sufficient to know that a reproduction matches the original?
-- Could tests send external notifications, write back into live systems, or trigger financial/business side effects?
-- Is a request to infrastructure more appropriate than agent execution?
+Depending on the actual environment, evidence might live in some combination of:
 
-**Output:** feasibility, isolation, data risks, estimated non-model cloud cost, approval requirements and one harmless experiment design.
+- monitoring/observability
+- alerts
+- application logs
+- infrastructure logs
+- traces
+- metrics
+- scheduler/orchestrator systems
+- object/file storage
+- file-transfer systems
+- queues/topics/event systems
+- databases
+- source repositories
+- deployment history
+- configuration
+- feature flags
+- Kubernetes/container systems
+- infrastructure systems
+- documentation
+- chat systems
+- incident history
+- tickets
+- dashboards
+- local developer tooling
+- external services
+- business-operated processes
 
-## Phase 6 — Evaluation, budget and next decision
-Define a test set and baselines before selecting technologies. Include:
-- name/definition ambiguity;
-- upstream and downstream mapping accuracy;
-- "unknown" and abstention behavior;
-- incident evidence citation;
-- false attribution to recent changes;
-- unauthorized action prevention;
-- stale and conflicting source behavior;
-- missing connector/permission handling;
-- token cost and tool cost per investigation;
-- time to useful evidence and percentage of actually resolved or correctly escalated cases.
+These are examples only.
 
-**Output:** a short risk register and a recommendation with explicit decision criteria. No promise of autonomous remediation.
+Discover which sources really exist.
 
-## Required final internal deliverables
-1. **Verified current environment inventory** with access boundaries and unknowns.
-2. **One grounded example entity map** with evidence-backed edges.
-3. **One retrospective incident investigation** in a structured, reviewed form.
-4. **A token-first retrieval and caching proposal** with approximate workload and cost measurements.
-5. **Two or three implementation options**, including a minimal non-graph option.
-6. **A live workspace wireframe/event model** using synthetic examples.
-7. **A sandbox/reproduction feasibility assessment** based on actual permissions.
-8. **Security/approval/retention and prompt-injection risk review.**
-9. **A prioritized list of questions for senior engineers**, with why each answer matters.
-10. **An estimated build sequence and realistic effort ranges**, based on discovered facts.
+## Desired user experience
 
-## Single-session kickoff prompt
-> Read this README and all linked documents. Treat them as research requirements, not verified facts. Make no production changes; do not copy internal information to the public repository. Begin with a tightly scoped inventory of accessible evidence and permissions. Investigate one user-approved operational object to produce a source-backed definition and upstream/downstream dependency map. Extract observable troubleshooting actions, not private chain-of-thought. Keep model tokens low by retrieving specific records on demand and measuring usage. Return your verified discoveries, unknowns, a safe prototype plan, permission gaps, estimated costs and questions for system owners. Do not impose a graph database, agent framework or infrastructure plan before evidence justifies it.
+Consider a generic report such as:
 
-## Stop conditions
-Stop scanning or executing when a source is unauthorized, a proposed test could affect live systems, the model/data boundary is unclear, the cost cap is reached, or evidence is too weak to claim a conclusion. Return a concise explanation of the blocker and exact next authorized step.
+    "The Output X did not arrive."
+
+"Output X" is only an illustrative placeholder.
+
+The eventual system should not merely search for the word.
+
+It should determine, from internal evidence:
+
+    What is Output X?
+
+    Is it a file?
+    A report?
+    A message?
+    A business process?
+    A job?
+    A stage?
+    An internal nickname?
+    Something else?
+
+Once identified, the user should eventually be able to inspect:
+
+    definition
+    aliases
+    owner
+    expected behavior
+    expected timing
+
+    upstream dependencies
+    producer
+    triggers
+    required inputs
+
+    transport/delivery path where applicable
+
+    downstream consumers
+    downstream business or technical impact
+
+    relevant implementation
+    repository/code references
+    relevant configuration
+
+    deployments and recent changes
+
+    observability references
+    schedules
+    runbooks
+
+    related historical incidents
+    known failure patterns
+
+Every relationship should have provenance.
+
+The system must distinguish:
+
+    verified facts
+    runtime observations
+    human-declared facts
+    inferred relationships
+    unknowns
+    stale information
+    contradicted information
+
+Never silently turn an inference into a fact.
+
+## Investigation model
+
+Study whether the environment can support an investigation loop like:
+
+    1. Identify the incident scope.
+
+    2. Resolve the affected entity or entities.
+
+    3. Establish:
+       - environment
+       - relevant time range
+       - ownership
+       - expected behavior
+
+    4. Retrieve a small amount of orientation context.
+
+    5. Generate a small set of competing, testable hypotheses.
+
+    6. For each hypothesis determine:
+       - evidence supporting it
+       - evidence contradicting it
+       - evidence still missing
+       - the cheapest/safest next check that could distinguish it
+         from competing hypotheses
+
+    7. Run targeted read-only checks using authorized tools.
+
+    8. Reduce large tool outputs before they enter expensive model context.
+
+    9. Record evidence as structured findings.
+
+    10. Update, reject, or deepen hypotheses.
+
+    11. Stop when:
+        - evidence is sufficient,
+        - further investigation has low expected value,
+        - a configured resource/query/token budget is reached,
+        - permission prevents further investigation,
+        - or human assistance is required.
+
+    12. Produce an evidence-backed conclusion or explicitly report
+        that the cause remains inconclusive.
+
+    13. Save only reviewed/reusable knowledge.
+
+Do not design the system around unconstrained free-form model reasoning.
+
+Prefer a visible investigation trace containing:
+
+    hypothesis
+    query/check
+    tool
+    source
+    result
+    evidence
+    conclusion change
+    next action
+
+## Evidence model
+
+Evaluate a structured evidence record resembling:
+
+    evidence_id
+    incident_id
+
+    claim
+
+    status:
+        verified
+        supported
+        contradicted
+        unknown
+
+    source_type
+    source_reference
+    source_timestamp
+    retrieval_timestamp
+
+    environment
+    entity_ids
+
+    query/check performed
+
+    supporting_evidence
+    contradicting_evidence
+
+    hypothesis_ids
+
+    confidence or evidence quality
+
+Do not treat generated prose as the primary system of record.
+
+The human explanation may be generated from structured records.
+
+## Entity and relationship discovery
+
+Inspect the real environment and identify candidate entity classes.
+
+Do not assume the following list is complete or correct.
+
+Possible examples include:
+
+    application
+    service
+    business process
+    job
+    schedule
+    artifact/file
+    storage location
+    queue/topic
+    event
+    database
+    table
+    API
+    repository
+    code module
+    dependency/library
+    deployment
+    environment
+    infrastructure resource
+    feature
+    team
+    alert
+    incident
+    runbook
+    external dependency
+
+Determine the actual internal vocabulary.
+
+Identify alias problems.
+
+Examples:
+
+    service-a
+    service_a
+    old-service-name
+    nickname used by operations
+
+may or may not refer to the same thing.
+
+Determine whether a canonical identifier can be built.
+
+Study candidate relationships such as:
+
+    produces
+    consumes
+    triggers
+    requires
+    depends_on
+    calls
+    publishes
+    subscribes_to
+    reads_from
+    writes_to
+    transfers_to
+    scheduled_by
+    implemented_by
+    deployed_from
+    configured_by
+    owned_by
+    monitored_by
+    observed_on
+    changed_by
+    affected_by
+
+Again, these are examples.
+
+Discover the relationships that actually matter internally.
+
+For every persisted relationship, consider storing:
+
+    source
+    evidence
+    verification state
+    environment
+    observed time
+    last verified time
+    validity interval
+
+## Knowledge architecture
+
+Do not assume that all internal information belongs in one RAG/vector index.
+
+Classify each source by the correct retrieval mechanism.
+
+Examples:
+
+    current telemetry
+        -> targeted live query
+
+    deployment/change records
+        -> exact lookup
+
+    scheduler state
+        -> scheduler API/query
+
+    current storage state
+        -> storage query
+
+    dependency relationships
+        -> graph/catalog lookup
+
+    code
+        -> code/search/index tools
+
+    ownership
+        -> authoritative ownership system where available
+
+    documentation/runbooks
+        -> lexical + semantic search
+
+    historical conversations
+        -> scoped search
+
+    prior incidents
+        -> incident retrieval
+
+Determine which data must be copied/indexed and which should remain at source.
+
+Prefer source references over unnecessary duplication.
+
+## Freshness
+
+Determine how each important source changes.
+
+For every source, identify whether freshness could be maintained using:
+
+    webhooks
+    events
+    change feeds
+    repository commits
+    deployment events
+    scheduled polling
+    runtime observations
+    periodic validation
+
+The eventual system should recognize that stored knowledge can become stale.
+
+Investigate a memory lifecycle:
+
+    discovered
+    candidate
+    verified
+    active
+    stale
+    contradicted
+    superseded
+    forgotten
+
+Determine which memories can be automatically revalidated.
+
+## Annotation and labeling
+
+Do not begin a broad manual annotation program.
+
+First determine which metadata and relationships can be extracted
+deterministically from existing systems.
+
+Identify which relationships can be learned from:
+
+    source code
+    configuration
+    manifests
+    scheduler definitions
+    runtime telemetry
+    deployment metadata
+    existing catalogs
+    documentation
+
+LLM extraction from prose should create candidate facts, not automatically
+trusted facts.
+
+Human review should focus on high-value relationships and evaluation cases.
+
+## Historical evaluation dataset
+
+Find a small representative set of past operational incidents.
+
+Prefer diversity over volume initially.
+
+For each candidate incident determine whether we can reconstruct:
+
+    original symptom
+    evidence available at incident start
+    affected entities
+    relevant timeline
+    actual root cause
+    resolution
+    misleading evidence
+    downstream effects
+    responder investigation path
+
+Watch for future-data leakage.
+
+Do not allow an evaluation agent to see:
+
+    later postmortems
+    fix commits that were not available yet
+    later messages revealing root cause
+    later documentation
+
+unless they were actually available at the point being simulated.
+
+Design an initial backtesting strategy.
+
+Propose evaluation metrics including:
+
+    root-cause correctness
+    evidence correctness
+    evidence completeness
+    hypothesis quality
+    time to useful context
+    tool-call efficiency
+    tokens per investigation
+    stale-knowledge errors
+    human correction frequency
+    permission violations
+    sandbox reproduction accuracy
+
+## Procedures and skills
+
+Study how humans currently troubleshoot recurring incident classes.
+
+Look for repeated sequences such as:
+
+    check X
+    then Y
+    if result A, inspect Z
+    otherwise inspect Q
+
+Do not blindly convert every historical sequence into a rule.
+
+Determine which parts are:
+
+    stable procedure
+    useful heuristic
+    one-time workaround
+    historical accident
+    obsolete behavior
+
+Propose a "skill" format capable of storing:
+
+    purpose
+    trigger conditions
+    applicable entities/environments
+    required tools
+    prerequisite evidence
+    suggested checks
+    branching conditions
+    stopping conditions
+    escalation conditions
+    known limitations
+    owner
+    version
+    last verification date
+
+Skills should guide the agent while still allowing investigation outside the
+skill when evidence justifies it.
+
+## Token and cost discipline
+
+Token efficiency is a primary architectural requirement.
+
+Measure it from the first prototype.
+
+Do not load:
+
+    entire repositories
+    entire log streams
+    entire chat histories
+    entire documentation collections
+    every available tool definition
+
+into model context.
+
+Investigate:
+
+    progressive retrieval
+    targeted queries
+    lexical search
+    semantic retrieval only where useful
+    reranking
+    tool discovery on demand
+    deterministic filtering
+    result reduction
+    caching
+    reusable structured facts
+    incremental indexing
+    model routing
+    explicit tool budgets
+    explicit token budgets
+    investigation stopping rules
+
+For a large result set, return a small structured summary plus a source
+reference rather than the complete payload when possible.
+
+Determine which tasks require a strong reasoning model and which can use:
+
+    deterministic code
+    SQL
+    graph queries
+    search
+    small/cheap models
+
+## Code and deployment correlation
+
+Determine whether the real environment permits the following chain to be built:
+
+    runtime entity
+        ->
+    deployed version
+        ->
+    deployment event
+        ->
+    commit/revision
+        ->
+    changed files/modules
+        ->
+    relevant implementation
+
+Inspect how deployments are currently recorded.
+
+Determine whether commit/revision metadata reaches runtime telemetry.
+
+Identify existing dependency manifests and lock files.
+
+Study existing code-search/navigation capabilities before proposing a new index.
+
+Do not assume that embedding the entire repository is sufficient.
+
+## Human-visible investigation workspace
+
+Design concepts for an interface where a human can watch an investigation.
+
+The interface should eventually expose:
+
+    affected entity
+
+    dependency map
+
+    upstream entities
+
+    downstream entities / likely blast radius
+
+    current hypotheses
+
+    validated hypotheses
+
+    rejected hypotheses
+
+    inconclusive hypotheses
+
+    live investigation events
+
+    tool/query used
+
+    evidence returned
+
+    links to authoritative source
+
+    recent code/config/deployment changes
+
+    prior incidents
+
+    proposed checks
+
+    permission boundaries
+
+    sandbox experiments
+
+    proposed actions
+
+The human must be able to inspect why the system believes a relationship or
+claim.
+
+Do not expose hidden model monologue as the product.
+
+Expose the auditable investigation state and evidence trail.
+
+Consider visual states for graph relationships:
+
+    VERIFIED
+    OBSERVED
+    INFERRED
+    HUMAN-CONFIRMED
+    STALE
+    DISPUTED
+
+## Permissions and production safety
+
+Inventory the actual permissions available to the intended users.
+
+Separate:
+
+    what can be observed
+    what can be queried
+    what can be executed
+    what requires infrastructure/security/other-team approval
+
+Do not assume that access through Kubernetes tooling permits deployment or
+mutation.
+
+The eventual agent must operate within the same authorization boundaries as
+its user/service identity.
+
+A model recommendation is not authorization.
+
+Production writes, if ever supported, must pass through deterministic policy
+and workflow controls outside the model.
+
+Consider an autonomy ladder:
+
+    OBSERVE
+        retrieve evidence
+
+    RECOMMEND
+        recommend next action
+
+    PREPARE
+        prepare exact action/request
+
+    EXECUTE WITH APPROVAL
+        authorized human approves deterministic workflow
+
+    NARROW POLICY-BASED EXECUTION
+        only for explicitly approved low-risk failure modes
+
+The discovery phase must remain read-only.
+
+## Infrastructure-team boundary
+
+Determine which operations only an infrastructure or platform team can
+perform.
+
+For those operations, design an escalation artifact containing:
+
+    requested action
+    exact target
+    why it is requested
+    supporting evidence
+    expected result
+    known risk
+    verification procedure
+    rollback considerations
+
+The investigation should remain useful even when the agent cannot itself
+perform the next operation.
+
+## Sandbox and incident reproduction
+
+Discover what lower/development/sandbox environments actually exist.
+
+Do not assume Terraform, Kubernetes, containers, or any specific technology is
+available.
+
+Determine whether selected failures could be reconstructed using some
+combination of:
+
+    unit/process-level reproduction
+    synthetic inputs
+    sanitized historical inputs
+    containers
+    service mocks
+    local infrastructure
+    emulated external services
+    replayed messages/events
+    lower environments
+    temporary namespaces/clusters
+    ephemeral infrastructure
+    fault injection
+
+If infrastructure-as-code exists and users are permitted to create isolated
+resources, evaluate whether it can support temporary reproduction
+environments.
+
+The agent should record environment differences and reproduction confidence.
+
+Possible outcomes must include:
+
+    REPRODUCED
+    PARTIALLY REPRODUCED
+    NOT REPRODUCED
+    CANNOT REPRODUCE WITH AVAILABLE ACCESS
+
+Never claim sandbox behavior proves production causality without supporting
+evidence.
+
+Do not automatically copy production secrets or sensitive production data into
+a lower environment.
+
+## Architecture alternatives
+
+Compare at minimum:
+
+    A. Incident-first architecture
+
+    B. Knowledge/catalog-first architecture
+
+    C. Graph-first architecture
+
+    D. Skill/runbook-first architecture
+
+    E. Hybrid incident-first + thin context graph + skills + evidence ledger
+
+Do not choose based on fashion.
+
+Choose based on observed internal requirements.
+
+Specifically determine whether a dedicated graph database is actually needed
+or whether a relational entity/relationship representation is sufficient for
+the first implementation.
+
+Likewise determine whether a dedicated vector database is required or whether
+existing search/index systems already solve the problem.
+
+## Initial implementation candidate
+
+Evaluate, but do not blindly adopt, a minimal architecture shaped like:
+
+    incident/question
+        ->
+    entity resolver
+        ->
+    context builder
+        ->
+    hypothesis planner
+        ->
+    tool router
+        ->
+    targeted queries
+        ->
+    result reducers
+        ->
+    evidence ledger
+        ->
+    hypothesis updater
+        ->
+    human-visible investigation
+        ->
+    reviewed memory
+
+with independent components for:
+
+    operational context graph
+    skills
+    historical evaluation
+    policy/permissions
+    sandbox execution
+
+## Discovery deliverable
+
+Produce a detailed report.
+
+The report must include:
+
+### Environment inventory
+
+What systems actually exist.
+
+### Information-source inventory
+
+What each system knows.
+
+### Permission matrix
+
+What the intended agent identity can read/write and what requires another
+team.
+
+### Current troubleshooting workflow
+
+Reconstruct several real human investigation paths.
+
+### Entity vocabulary
+
+What nouns actually matter internally.
+
+### Relationship vocabulary
+
+What dependency types actually matter.
+
+### Identifier problems
+
+Aliases, inconsistent names, missing environment identifiers, etc.
+
+### Existing metadata
+
+What relationships can already be obtained without AI.
+
+### Existing search/index capabilities
+
+Avoid rebuilding tools that already exist.
+
+### Historical incident availability
+
+Whether useful backtesting is possible.
+
+### Sandbox capability
+
+What can realistically be reproduced outside production.
+
+### Knowledge freshness model
+
+How important sources can remain current.
+
+### Token-cost model
+
+Estimate retrieval and model consumption for several representative
+investigations.
+
+### Architecture comparison
+
+Compare candidate designs against the actual environment.
+
+### Recommended narrow prototype
+
+Select one useful incident/problem class.
+
+Choose the minimum set of connectors needed.
+
+Define success/failure criteria.
+
+### Evaluation plan
+
+Define historical cases and metrics before broad rollout.
+
+### Risks and unknowns
+
+Explicitly state what has not yet been established.
+
+## Evidence requirements for this discovery
+
+Every important conclusion must cite internal evidence where possible:
+
+    repository path
+    code symbol
+    configuration path
+    documentation page
+    API/resource
+    deployment metadata
+    dashboard
+    query
+    incident
+    historical message
+    runbook
+
+Separate:
+
+    VERIFIED FACT
+    INFERENCE
+    RECOMMENDATION
+    UNKNOWN
+
+Do not present guesses as architecture facts.
+
+## Final constraint
+
+Do not optimize for impressive autonomy.
+
+Optimize for:
+
+    correctness
+    evidence
+    inspectability
+    low token consumption
+    low query volume
+    freshness
+    permission safety
+    usefulness to a human responder
+
+The first successful system should make a human investigation substantially
+faster and easier to understand.
+
+Autonomy can be earned later.
